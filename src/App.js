@@ -9,7 +9,7 @@ import './App.css'
 import SignUp from './components/signUp';
 import HomePage from './components/home.js'
 import SignOut from './components/signOut';
-import contactPage from './components/contactPage';
+import ContactPage from './components/contactPage';
 import TestResults from './components/testResult';
 import DailySymptoms from './components/dailySx';
 
@@ -28,7 +28,7 @@ import DailySymptoms from './components/dailySx';
           <Switch>
 
             <Route path="/home" component={HomePage} /> 
-            <Route path="/contactPage" component={contactPage} /> 
+            <Route path="/contactPage" component={ContactPage} /> 
             <Route path="/contactInfo" component={ContactInfo} /> 
             <Route path="/testResult" component={TestResults} /> 
             <Route path="/dailySx" component={DailySymptoms} /> 
