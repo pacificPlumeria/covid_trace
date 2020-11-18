@@ -8,7 +8,7 @@ import React, { Component} from "react";
 
 
 
-export default class contactPage extends Component{
+export default class ContactPage extends Component{
     constructor(props) {
         super(props);
     }
