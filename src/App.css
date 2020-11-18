@@ -10,6 +10,10 @@ li {
   float: left;
 }
 
+#signout{
+  float: right;
+}
+
 li a {
   display: block;
   color: white;
@@ -22,3 +26,5 @@ li a {
 li a:hover {
   background-color: rgb(133, 233, 235);
 }
+
+
