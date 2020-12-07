@@ -1,174 +1,152 @@
-import React, { Component } from "react";
-import { Link } from 'react-router-dom';
+import React, {useState, useContext} from "react";
+import UserContext from "../context/UserContext";
+import {useHistory} from "react-router-dom";
+import axios from 'axios';
+import ErrorNotice from "./misc/ErrorNotice";
 
+export default function Register(){
+  const [username, setUsername] = useState();
+  const [password, setPassword] = useState();
+  const [passwordCheck, setPasswordCheck] = useState();
+  const [error, setError] = useState();
 
+  const {setUserData} = useContext(UserContext);
+  const history = useHistory();
 
+  const submit = async (e) => {
+    e.preventDefault();
 
-  export default class SignUp extends Component{
-    constructor(props) {
-    super(props);
-
-    this.onChangeUsername = this.onChangeUsername.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangeDOB = this.onChangeDOB.bind(this);
-    this.onChangeAddress = this.onChangeAddress.bind(this);
-    this.onChangePhone = this.onChangePhone.bind(this);
-    this.onChangeGender = this.onChangeGender.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-
-    this.state = {
-    username: '',
-    password: '',
-    email:'',
-    dob: '',
-    address:'',
-    phone:'',
-    gender:'',
+    try{
+      const newUser = {username, password, passwordCheck};
+      await axios.post(
+        "http://localhost:5000/users/add", 
+        newUser
+      );
+      const loginRes = await axios.post("http://localhost:5000/users/login", {
+        username,
+        password,
+      });
+      setUserData({
+        token: loginRes.data.token,
+        user: loginRes.data.user,
+      });
+      localStorage.setItem("auth-token", loginRes.data.token);
+      history.push("/home");
+  } catch(err){
+      err.response.data.msg && setError(err.response.data.msg);
     }
-  }
-
-//   // coming from mongodb
-// componentDidMount() {
-//   axios.get('http://localhost:5000/users/')
-//     .then(response => {
-//       if (response.data.length > 0) {
-//         this.setState({
-//           users: response.data.map(user => user.username),
-//           username: response.data[0].username
-//         })
-//       }
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     })
-
-// }
-
-onChangeUsername(e) {
-  this.setState({
-    username: e.target.value
-  })
-}
-
-onChangePassword(e) {
-  this.setState({
-    password: e.target.value
-  })
-}
-
-onChangeEmail(e) {
-  this.setState({
-    email: e.target.value
-  })
-}
-
-onChangeDOB(e) {
-  this.setState({
-    dob: e.target.value
-  })
-}
-
-onChangeAddress(e) {
-  this.setState({
-    address: e.target.value
-  })
-}
-
-onChangePhone(e) {
-  this.setState({
-    phone: e.target.value
-  })
-}
-
-onChangeGender(e) {
-  this.setState({
-    gender: e.target.value
-  })
-}
-
-onSubmit(e) {
-  e.preventDefault();
-
-  const newUser = {
-    username: this.state.username,
-    password: this.state.password,
-    email: this.state.email,
-    dob:this.state.dob,
-    address:this.state.address,
-    phone:this.state.phone,
-    gender:this.state.gender,
-  }
-
-  console.log(newUser);
-
-  // axios.post('http://localhost:5000/exercises/add', exercise)
-  //   .then(res => console.log(res.data));
-
-  // window.location = '/';
-}
-    
-
-    render(){
-      return(
+  };
+  //   constructor(props) {
+  //     super(props);
 
 
-        <section>
-          <div className="container" >
-            <div className="user signinBx" >
-              <div className="formBx" >
-                <form >
-                  <h2>Create an account</h2>
-                  <input type="text" 
-                  value={this.state.username}
-                  onChange={this.myChangeUserName}
-                  name placeholder="Username" />
+  //     this.onChangeUsername = this.onChangeUsername.bind(this);
+  //     this.onChangePassword = this.onChangePassword.bind(this);
+  //     this.onSubmit = this.onSubmit.bind(this);
 
-                  <input type="email" 
-                  value={this.state.email} 
-                  onChange={this.myChangeEmail}
-                  name placeholder="Email Address" />
+  //     this.state = {
+  //     username: '',
+  //     password: ''
+  //     }
+  //   }
 
-                  <input type="password" 
-                  value={this.state.password}
-                  onChange={this.myChangePassword} 
-                  name placeholder="Create Password" />
+  // onChangeUsername(e) {
+  //   this.setState({
+  //     username: e.target.value
+  //   })
+  // }
 
-                  <input type="password" name placeholder="Confirm Password" />
+  // onChangePassword(e) {
+  //   this.setState({
+  //     password: e.target.value
+  //   })
+  // }
 
-                  <input type="gender"
-                  value={this.state.gender}
-                  onChange={this.myChangeGender}  
-                  name placeholder="drop down gender" />
+  // onSubmit(e) {
+  //   e.preventDefault();
 
-                  <input type="dob"
-                  value={this.state.dob}
-                  onChange={this.myChangeDOB}  
-                  name placeholder="dob" />
+  //   const user = {
+  //     username: this.state.username,
+  //     password: this.state.password
+  //   }
 
-                  <input type="address" 
-                  value={this.state.address}
-                  onChange={this.myChangeAddress}  
-                  name placeholder="Address" />
+  //   console.log(user);
 
-                  <input type="phone" 
-                  value={this.state.phone}
-                  onChange={this.myChangePhone}  name placeholder="Phone number" />
-                  
-                  <p>
-                  < Link to={{pathname:'/home'}}><input type="button" name defaultValue="Sign Up"/></Link> 
-                  </p>
+  //   axios.post('http://localhost:5000/users/add', user)
+  //     .then(res => console.log(res.data));
 
-                  <p className="signin">
-                  Already have an account ?
-                  <Link to={{pathname:'/'}}>Login </Link>
-                  </p>
-                </form>
-              </div>
+  //   window.location = '/';
+  // }
+
+  // render() {
+    return(
+      <section>
+        <div className="container">
+          <div className="user signinBx" >
+            <div className="formBx">
+              <form onSubmit={submit} >
+                <h2>Register</h2>
+                {error && (
+                  <ErrorNotice message={error} clearError={() => setError(undefined)} />
+                )}
+                <label>Username</label>
+                <input 
+                type = "text" 
+                required 
+                onChange={(e) => setUsername(e.target.value)}
+                />
+
+                <label>Password</label>   
+                <input 
+                id="register-password" 
+                type = "password" 
+                required
+                onChange={(e) => setPassword(e.target.value)}
+                />
+
+                <input type = "password" 
+                placeholder="Verify password" 
+                required
+                onChange={(e) => setPasswordCheck(e.target.value)}
+                />
+  
+                <input type= "submit" value="Register" />
+              </form>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
+    )
+  } 
 
-      )
-    }
-  }
+//   return (
+//       <div className="page">
+//         <h2>Register</h2>
+//         <form onSubmit={submit}>
+//             <label htmlFor="register-username">Username</label>
+//             <input 
+//               id="register-username" 
+//               type = "text" 
+//               required 
+//               onChange={(e) => setUsername(e.target.value)}
+//             />
+
+//             <label htmlFor="register-password">Password</label>
+//             <input 
+//               id="register-password" 
+//               type = "password" 
+//               required
+//               onChange={(e) => setPassword(e.target.value)}
+//             />
+
+//             <input type = "password" 
+//               placeholder="Verify password" 
+//               required
+//               onChange={(e) => setPasswordCheck(e.target.value)}
+//             />
+
+//             <input type= "submit" value="Register" />
+//         </form>
+//       </div>
+//   );
+// }
