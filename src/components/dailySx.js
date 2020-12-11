@@ -20,7 +20,7 @@ export default function DailySymptoms() {
         try{
           const newRecord = {symptoms, fever, date};
           await axios.post(
-            "http://localhost:5000/symptoms/add", 
+            "/symptoms/add", 
             newRecord,
             {headers: {"x-auth-token": userData.token}},
           );
