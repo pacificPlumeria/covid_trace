@@ -1,10 +1,10 @@
+// import React, { Component} from "react";
+// import { Link } from 'react-router-dom';
+import React, {useEffect, useContext} from "react";
+import UserContext from "../context/UserContext";
+import {useHistory} from "react-router-dom";
 
-import React, { Component} from "react";
-import { Link } from 'react-router-dom';
-
-
-
-export default class HomePage extends Component{
+/* export default class HomePage extends Component{
     constructor(props) {
         super(props);
       }
@@ -13,7 +13,7 @@ export default class HomePage extends Component{
       return(
         
         <div>
-          <h1>i am home page</h1>
+          <h1>Covid-Trace</h1>
           <Link to={{pathname:'/testResult'}}><input type="button" name defaultValue="Test Results"/></Link> 
           
         <br></br><br></br>
@@ -35,4 +35,20 @@ export default class HomePage extends Component{
         </div>
       )
     }
+} */
+
+export default function HomePage() {
+  const {userData} = useContext(UserContext); 
+  const history = useHistory();
+
+  useEffect(() => {
+    if(!userData.user) history.push("/");
+  });
+
+  return ( 
+    <div className="page">Home</div>
+
+
+
+  )
 }
